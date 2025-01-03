@@ -208,7 +208,6 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
     <script>
       // Функция для загрузки продуктов из базы данных
       function loadCatalog(category) {
@@ -508,176 +507,101 @@
       });
       // Обработчик нажатия на кнопку "Оформить заказ" в модальном окне оформления заказа
       document.querySelector('#submitOrder').addEventListener('click', () => {
-          const surname = document.getElementById('surname').value.trim();
-          const name = document.getElementById('name').value.trim();
-          const patronymic = document.getElementById('patronymic').value;
-          const phone = document.getElementById('phone').value.trim();
-          const email = document.getElementById('email').value.trim();
-          const deliveryAddress = document.getElementById('deliveryAddress').value;
-          const details = document.getElementById('details').value;
+      event.preventDefault(); // Отменяем стандартное действие кнопки
 
+      const surname = document.getElementById('surname').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const patronymic = document.getElementById('patronymic').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const deliveryAddress = document.getElementById('deliveryAddress').value;
+      const details = document.getElementById('details').value.trim();
+      const cart = JSON.stringify(window.cart); // Преобразуем корзину в JSON-строку
 
-          event.preventDefault(); // Отменяем стандартное действие кнопки
-          // Проверяем заполненность полей
-          if (!surname || !name || !email || !phone) {
-              if (!surname) {
-                  document.getElementById('surname').classList.add('is-invalid');
-              } else {
-                  document.getElementById('surname').classList.remove('is-invalid');
-              }
-
-              if (!name) {
-                  document.getElementById('name').classList.add('is-invalid');
-              } else {
-                  document.getElementById('name').classList.remove('is-invalid');
-              }
-
-              if (!email) {
-                  document.getElementById('email').classList.add('is-invalid');
-              } else {
-                  document.getElementById('email').classList.remove('is-invalid');
-              }
-
-              if (!phone) {
-                  document.getElementById('phone').classList.add('is-invalid');
-              } else {
-                  document.getElementById('phone').classList.remove('is-invalid');
-              }
-
-              return;
+      // Проверяем заполненность полей
+      if (!surname || !name || !email || !phone) {
+          if (!surname) {
+              document.getElementById('surname').classList.add('is-invalid');
+          } else {
+              document.getElementById('surname').classList.remove('is-invalid');
           }
 
-          const orderItemsList = document.getElementById('orderItemsList');
-          orderItemsList.innerHTML = ''; // Очистить список товаров
-          // Здесь можно добавить код для отправки информации на сервер или по почте
-          // Перебираем корзину и добавляем только отмеченные товары в заказ
-          const selectedProducts = window.cart.filter((product, index) => {
-              const checkbox = document.getElementById(`cart-item-${index}`);
-              return checkbox.checked; // Оставляем только отмеченные товары
-          });
-
-          selectedProducts.forEach(product => {
-              const item = document.createElement('li');
-              item.textContent = `${product.name} (x${product.quantity}) - ${product.price * product.quantity}₽`;
-              orderItemsList.appendChild(item);
-          });
-          // Удаление оформленных товаров из корзины
-          window.cart = window.cart.filter((product, index) => {
-              const checkbox = document.getElementById(`cart-item-${index}`);
-              return !checkbox.checked; // Сохраняем только неотмеченные товары
-          });
-
-          // Сохраняем обновленную корзину в localStorage
-          localStorage.setItem('cart', JSON.stringify(window.cart)); 
-          updateCart(); // Обновляем отображение корзины после удаления
-
-          // Сообщение об успешном заказе
-          alert('Заказ отправлен!');
-          
-          // Закрытие модального окна оформления заказа
-          const orderModal = bootstrap.Modal.getInstance(document.getElementById('orderModal'));
-          if (orderModal) {
-              orderModal.hide();
+          if (!name) {
+              document.getElementById('name').classList.add('is-invalid');
+          } else {
+              document.getElementById('name').classList.remove('is-invalid');
           }
+
+          if (!email) {
+              document.getElementById('email').classList.add('is-invalid');
+          } else {
+              document.getElementById('email').classList.remove('is-invalid');
+          }
+
+          if (!phone) {
+              document.getElementById('phone').classList.add('is-invalid');
+          } else {
+              document.getElementById('phone').classList.remove('is-invalid');
+          }
+
+          return;
+      }
+
+      // Отправляем данные на сервер
+      fetch('submit_order.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+              last_name: surname,
+              first_name: name,
+              middle_name: patronymic,
+              phone: phone,
+              email: email,
+              delivery_address: deliveryAddress,
+              cart: cart,
+              order_details: details,
+          }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              alert('Ошибка: ' + data.error);
+          } else {
+              alert(data.message); // Показываем сообщение об успешном оформлении заказа
+
+              // Удаление оформленных товаров из корзины
+              window.cart = window.cart.filter((product, index) => {
+                  const checkbox = document.getElementById(`cart-item-${index}`);
+                  return !checkbox.checked; // Сохраняем только неотмеченные товары
+              });
+
+              // Сохраняем обновленную корзину в localStorage
+              localStorage.setItem('cart', JSON.stringify(window.cart)); 
+              updateCart(); // Обновляем отображение корзины после удаления
+
+              // Очищаем форму
+              document.getElementById('surname').value = '';
+              document.getElementById('name').value = '';
+              document.getElementById('patronymic').value = '';
+              document.getElementById('phone').value = '';
+              document.getElementById('email').value = '';
+              document.getElementById('deliveryAddress').value = '';
+              document.getElementById('details').value = '';
+
+              // Закрытие модального окна оформления заказа
+              const orderModal = bootstrap.Modal.getInstance(document.getElementById('orderModal'));
+              if (orderModal) {
+                  orderModal.hide();
+              }
+          }
+      })
+      .catch(error => {
+          console.error('Ошибка:', error);
+          alert('Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте еще раз.');
       });
-
-      // Функция для отправки данных формы на сервер
-      document.querySelector('#submitOrder').addEventListener('click', (event) => {
-    event.preventDefault(); // Отменяем стандартное действие кнопки
-
-    const surname = document.getElementById('surname').value.trim();
-    const name = document.getElementById('name').value.trim();
-    const patronymic = document.getElementById('patronymic').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const deliveryAddress = document.getElementById('deliveryAddress').value;
-    const details = document.getElementById('details').value.trim();
-    const cart = JSON.stringify(window.cart); // Преобразуем корзину в JSON-строку
-
-    // Проверяем заполненность полей
-    if (!surname || !name || !email || !phone) {
-        if (!surname) {
-            document.getElementById('surname').classList.add('is-invalid');
-        } else {
-            document.getElementById('surname').classList.remove('is-invalid');
-        }
-
-        if (!name) {
-            document.getElementById('name').classList.add('is-invalid');
-        } else {
-            document.getElementById('name').classList.remove('is-invalid');
-        }
-
-        if (!email) {
-            document.getElementById('email').classList.add('is-invalid');
-        } else {
-            document.getElementById('email').classList.remove('is-invalid');
-        }
-
-        if (!phone) {
-            document.getElementById('phone').classList.add('is-invalid');
-        } else {
-            document.getElementById('phone').classList.remove('is-invalid');
-        }
-
-        return;
-    }
-
-    // Отправляем данные на сервер
-    fetch('submit_order.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            last_name: surname,
-            first_name: name,
-            middle_name: patronymic,
-            phone: phone,
-            email: email,
-            delivery_address: deliveryAddress,
-            cart: cart,
-            order_details: details,
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert('Ошибка: ' + data.error);
-        } else {
-            alert(data.message); // Показываем сообщение об успешном оформлении заказа
-
-            // Удаление оформленных товаров из корзины
-            window.cart = window.cart.filter((product, index) => {
-                const checkbox = document.getElementById(`cart-item-${index}`);
-                return !checkbox.checked; // Сохраняем только неотмеченные товары
-            });
-
-            // Сохраняем обновленную корзину в localStorage
-            localStorage.setItem('cart', JSON.stringify(window.cart)); 
-            updateCart(); // Обновляем отображение корзины после удаления
-
-            // Очищаем форму
-            document.getElementById('surname').value = '';
-            document.getElementById('name').value = '';
-            document.getElementById('patronymic').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('deliveryAddress').value = '';
-            document.getElementById('details').value = '';
-
-            // Закрытие модального окна оформления заказа
-            const orderModal = bootstrap.Modal.getInstance(document.getElementById('orderModal'));
-            if (orderModal) {
-                orderModal.hide();
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-        alert('Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте еще раз.');
-    });
-});
+  });
 
     </script>
 
