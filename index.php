@@ -193,7 +193,7 @@
                             <h5 class="product-card-title">Купальник</h5>
                             <p class="product-card-text">Красивый купальник со стразами на выступление</p>
                             <p class="product-card-price">Цена: 1500 руб.</p>
-                            <a href="catalog.html" class="btn btn-primary">Посмотреть</a>
+                            <a href="catalog.php" class="btn btn-primary">Посмотреть</a>
                         </div>
                     </div>
                     <div class="product-card">
@@ -211,7 +211,7 @@
                             <h5 class="product-card-title">Купальник</h5>
                             <p class="product-card-text">Красивый купальник со стразами на выступление</p>
                             <p class="product-card-price">Цена: 1600 руб.</p>
-                            <a href="catalog.html" class="btn btn-primary">Посмотреть</a>
+                            <a href="catalog.php" class="btn btn-primary">Посмотреть</a>
                         </div>
                     </div>
                 </div>
@@ -224,7 +224,7 @@
                             <h5 class="product-card-title">Купальник</h5>
                             <p class="product-card-text">Красивый купальник со стразами на выступление</p>
                             <p class="product-card-price">Цена: 1800 руб.</p>
-                            <a href="catalog.html" class="btn btn-primary">Посмотреть</a>
+                            <a href="catalog.php" class="btn btn-primary">Посмотреть</a>
                         </div>
                     </div>
                     <div class="product-card">
@@ -233,7 +233,7 @@
                             <h5 class="product-card-title">Купальник</h5>
                             <p class="product-card-text">Красивый купальник со стразами на выступление</p>
                             <p class="product-card-price">Цена: 1900 руб.</p>
-                            <a href="catalog.html" class="btn btn-primary">Посмотреть</a>
+                            <a href="catalog.php" class="btn btn-primary">Посмотреть</a>
                         </div>
                     </div>
                     <div class="product-card">
@@ -242,7 +242,7 @@
                             <h5 class="product-card-title">Купальник</h5>
                             <p class="product-card-text">Красивый купальник со стразами на выступление</p>
                             <p class="product-card-price">Цена: 2000 руб.</p>
-                            <a href="catalog.html" class="btn btn-primary">Посмотреть</a>
+                            <a href="catalog.php" class="btn btn-primary">Посмотреть</a>
                         </div>
                     </div>
                     
@@ -260,7 +260,7 @@
     </div>
     <!-- Ссылка на каталог -->
     <div class="catalog-link">
-        <a href="catalog.html" class="btn btn-secondary">Перейти в каталог</a>
+        <a href="catalog.php" class="btn btn-secondary">Перейти в каталог</a>
     </div>
 
 
