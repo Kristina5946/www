@@ -12,11 +12,16 @@ if ($conn->connect_error) {
 }
 
 // Получаем данные из POST-запроса
-$name = $_POST['name'];
-$phone = $_POST['phone'];
-$email = $_POST['email'];
-$question = $_POST['question'];
+$name = htmlspecialchars(strip_tags($_POST['name']));
+$phone = htmlspecialchars(strip_tags($_POST['phone']));
+$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+$question = htmlspecialchars(strip_tags($_POST['question']));
 
+// Проверяем корректность данных
+if (!$name || !$phone || !$email || !$question) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Некорректные данные']));
+}
 
 // Подготавливаем и выполняем SQL-запрос
 $sql = "INSERT INTO feedback (name, phone, email, question) VALUES (?, ?, ?, ?)";
@@ -29,7 +34,7 @@ if ($stmt->execute()) {
     http_response_code(500);
     echo json_encode(['error' => 'Ошибка: ' . $stmt->error]);
 }
-
+header('Content-Type: application/json; charset=utf-8');
 $stmt->close();
 $conn->close();
 ?>

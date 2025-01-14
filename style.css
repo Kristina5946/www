@@ -128,7 +128,7 @@ header {
 }
 
 .bg-image1 {
-    background-image: url('фон1.jpg'); /* Замените на ваш путь к изображению */
+    background-image: url('image/фон1.jpg'); /* Замените на ваш путь к изображению */
     background-size: cover;
     background-position: center;
     position: absolute;
@@ -139,7 +139,7 @@ header {
     z-index: 1; /* За видео и текстом */
 }
 .bg-image2 {
-    background-image: url('фон2.jpg'); /* Замените на ваш путь к изображению */
+    background-image: url('image/фон2.jpg'); /* Замените на ваш путь к изображению */
     background-size: cover;
     background-position: center;
     position: absolute;
@@ -250,7 +250,7 @@ header {
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('фон для карточек.jpg');
+    background-image: url('image/фон для карточек.jpg');
     background-size: cover;
     background-position: center;
     opacity: 0.5; /* Устанавливаем прозрачность фона */
@@ -489,7 +489,7 @@ header {
 
 /* Стили для секции "Почему именно мы?" */
 .background-section {
-    background-image: url('фон3.jpg'); /* Замените на путь к вашему фоновому изображению */
+    background-image: url('image/фон3.jpg'); /* Замените на путь к вашему фоновому изображению */
     background-size: cover; /* Изображение охватывает весь фон */
     background-position: center; /* Центрируем изображение */
     height: 1000px; /* Высота секции */
@@ -644,7 +644,7 @@ header {
 
 /* Стили для обложки */
 .cover {
-  background-image: url('фон для девочек.jpg'); /* Изображение обложки по умолчанию */
+  background-image: url('image/фон для девочек.jpg'); /* Изображение обложки по умолчанию */
   background-size: cover;
   background-position: center;
   padding: 230px 0;
@@ -653,7 +653,7 @@ header {
 }
 
 .cover {
-  background-image: url('фон для фон для мальчиков.jpg'); /* Изображение обложки по умолчанию */
+  background-image: url('image/фон для фон для мальчиков.jpg'); /* Изображение обложки по умолчанию */
   background-size: cover;
   background-position: center;
   padding: 230px 0;

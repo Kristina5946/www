@@ -9,119 +9,10 @@
 </head>
 <body>
     <header>
-        
-        <nav class="navbar navbar-expand-lg" style="background-color: #F3ECF8;">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="logo.png" alt="Логотип" class="logo">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.php">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="catalog.php">Каталог</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="contacts.php">Контакты</a>
-                        </li>
-                        <li class="nav-item">
-                            <form class="d-flex search-form" role="search">
-                                <input class="form-control me-2 search-input" type="search" placeholder="Поиск" aria-label="Поиск">
-                                <button class="btn custom-btn" type="submit">
-                                    <img src="поисковик.png" alt="Поиск" class="icon">
-                                </button>
-                            </form>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-cart" data-bs-toggle="modal" data-bs-target="#cart-modal">
-                                <img src="корзина.png" alt="Корзина" class="icon">
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        
-        <div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="cartModalLabel">Корзина</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Корзина пуста. Добавьте товары для оформления заказа.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                        <button type="button" id="checkoutButton" class="btn btn-primary">Оформить заказ</button>
-                        <!-- Модальное окно для оформления заказа -->
-                        <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="orderModalLabel">Оформление заказа</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="mb-3">
-                                  <label for="surname" class="form-label">Фамилия</label>
-                                  <input type="text" class="form-control" id="surname" required>
-                                </div>
-                                <div class="mb-3">
-                                  <label for="name" class="form-label">Имя</label>
-                                  <input type="text" class="form-control" id="name" required>
-                                </div>
-                                <div class="mb-3">
-                                  <label for="patronymic" class="form-label">Отчество</label>
-                                  <input type="text" class="form-control" id="patronymic" required>
-                                </div>
-                                <div class="mb-3">
-                                  <label for="phone" class="form-label">Телефон</label>
-                                  <input type="tel" class="form-control" id="phone" required>
-                                </div>
-                                <div class="mb-3">
-                                  <label for="email" class="form-label">Email</label>
-                                  <input type="email" class="form-control" id="email" required>
-                                </div>
-                                <div class="mb-3">
-                                  <label for="deliveryAddress" class="form-label">Адрес доставки</label>
-                                  <select class="form-select" id="deliveryAddress">
-                                    <option selected disabled>Выберите адрес</option>
-                                    <option>Адрес 1</option>
-                                    <option>Адрес 2</option>
-                                    <!-- Добавьте другие адреса -->
-                                  </select>
-                                </div>
-                                <div class="mb-3">
-                                  <label>Проверка корзины товаров</label>
-                                  <ul id="orderItemsList"></ul> <!-- Список добавленных товаров -->
-                                </div>
-                                <div class="mb-3">
-                                  <label for="details" class="form-label">Укажите размер, цвет и детали заказа</label>
-                                  <textarea class="form-control" id="details"></textarea>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                                <button type="button" class="btn btn-primary" id="submitOrder">Оформить заказ</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php include 'navbar.php'; ?>
     </header>
     <!-- Контейнер с фоновым изображением -->
-    <div class="container-fluid bg-image d-flex align-items-center justify-content-center" style="background-image: url('фон для карточек.jpg'); height: 100vh;">
+    <div class="container-fluid bg-image d-flex align-items-center justify-content-center" style="background-image: url('image/фон для карточек.jpg'); height: 100vh;">
       <div class="container bg-overlay p-5 rounded-3 shadow-lg">
         <div class="row">
           <!-- Колонка контактов -->
@@ -157,89 +48,11 @@
       </div>
     </div>
 
-    <!-- Форма поддержки -->
-    <section class="order-form-section">
-        <form class="order-form mx-auto" style="max-width: 600px;">
-            <h4>Свяжитесь с нами</h4>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Имя" required>
-                </div>
-                <div class="col-md-6">
-                    <input type="tel" class="form-control" placeholder="Телефон" required>
-                </div>
-                <div class="col-md-6">
-                    <input type="email" class="form-control" placeholder="Email" required>
-                </div>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" placeholder="Опишите ваш вопрос..." required>
-                </div>
-            </div>
-            <div class="form-check mt-3">
-                <input class="form-check-input" type="checkbox" id="terms">
-                <label class="form-check-label" for="terms">
-                    Я прочитал(а) и соглашаюсь с правилами сайта <a href="#">правила и условия</a>
-                </label>
-            </div>
-            <div class="text-center mt-4">
-                <button type="submit" class="btn order-btn" disabled>Связаться</button>
-            </div>
-            <!-- Модальное окно для правил -->
-            <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="termsModalLabel">Правила и условия</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-                        </div>
-                        <div class="modal-body">
-                            Здесь будет текст правил и условий...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </section>
-
-    <script>
-    // Обработчик для чекбокса "Согласие с условиями"
-    document.getElementById('terms').addEventListener('change', function(event) {
-        if (event.target.checked) {
-            // Если чекбокс отмечен, показываем модальное окно
-            const termsModal = new bootstrap.Modal(document.getElementById('termsModal'));
-            termsModal.show();
-        }
-        // Обработчик для чекбокса "Согласие с условиями"
-        const submitButton = document.querySelector('.order-btn');
-        submitButton.disabled = !event.target.checked; // Активируем кнопку если чекбокс выбран
-
-    });
-    </script>
-
-    <!-- Добавление иконки ватсапа для свзи изменить номер!!!!! -->
-    <a href="https://wa.me/89880054918" class="whatsapp-icon" target="_blank">
-        <img src="whatsapp-icon.png" alt="WhatsApp" />
-    </a>
-
-    <style>
-        .whatsapp-icon {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
-        }
-
-        .whatsapp-icon img {
-            width: 60px; /* Настройте размер иконки */
-        }
-    </style>
+    <?php include 'connection.php'; ?>
 
     <!-- Нижняя часть страницы (подвал) -->
     <div class="footer">
-        © 2024 PROспорт34 | Тел: +7(988) 005-49-18 | <a href="https://vk.com/pro_sport_34">ВКонтакте</a>
+        <?php include 'footer.php'; ?>
     </div>
 
 
