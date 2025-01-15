@@ -18,13 +18,47 @@
                     <a class="nav-link" href="contacts.php">Контакты</a>
                 </li>
                 <li class="nav-item">
-                    <form class="d-flex search-form" role="search">
-                        <input class="form-control me-2 search-input" type="search" placeholder="Поиск" aria-label="Поиск">
+                    <form class="d-flex search-form" role="search" action="catalog.php" method="GET" onsubmit="passSearchQuery(event)">
+                        <input class="form-control me-2 search-input" id="navbar-search-input" type="search" name="query" placeholder="Поиск" aria-label="Поиск">
                         <button class="btn custom-btn" type="submit">
                             <img src="image/поисковик.png" alt="Поиск" class="icon">
                         </button>
                     </form>
                 </li>
+                <script>
+                    // Обработка формы навигационного поиска
+                    function passSearchQuery(event) {
+                        event.preventDefault(); // Останавливаем стандартное поведение формы
+                        const query = document.getElementById('navbar-search-input').value.trim();
+
+                        if (!query) {
+                            alert('Введите запрос для поиска');
+                            return;
+                        }
+
+                        // Перенаправление на каталог с переданным параметром поиска
+                        window.location.href = `catalog.php?query=${encodeURIComponent(query)}`;
+                    }
+
+                    // На странице каталога
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const queryParam = urlParams.get('query');
+
+                        if (queryParam) {
+                            const searchInput = document.getElementById('search-query');
+                            if (searchInput) {
+                                searchInput.value = queryParam; // Устанавливаем переданный запрос в поле ввода
+                            }
+
+                            // Выполняем поиск автоматически
+                            loadScript('catalog.js'); // Подключаем поисковый скрипт
+                            searchCatalog(queryParam); // Передаем запрос для поиска
+                        }
+                    });
+                    
+                </script>
+
                 <li class="nav-item">
                     <button type="button" class="btn btn-cart" data-bs-toggle="modal" data-bs-target="#cart-modal">
                         <img src="image/корзина.png" alt="Корзина" class="icon">
