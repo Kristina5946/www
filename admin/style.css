@@ -1,0 +1,72 @@
+body {
+    background-color:hsla(240, 22.10%, 15.10%, 0.80);
+    color: #fff;
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.sidebar {
+    background-color:rgba(37, 38, 54, 0.91); /* Прозрачный фон */
+    min-height: 100vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Тень для боковой панели */
+}
+
+.sidebar a {
+    color: #c9c9d1;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #343a40;
+    color: white;
+}
+
+.main-content {
+    padding: 20px;
+}
+
+.card {
+    background-color: rgba(43, 45, 66, 0.9); /* Прозрачный фон */
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Тень для карточек */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardFadeIn 0.8s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card:nth-child(1) {
+    animation-delay: 0.2s; /* Задержка для первой карточки */
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.4s; /* Задержка для второй карточки */
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.6s; /* Задержка для третьей карточки */
+}
+
+.card-title {
+    font-size: 1.2rem;
+}

@@ -126,8 +126,12 @@
                                     <label for="deliveryAddress" class="form-label">Адрес доставки</label>
                                     <select class="form-select" id="deliveryAddress">
                                         <option selected disabled>Выберите адрес</option>
-                                        <option>Адрес 1</option>
-                                        <option>Адрес 2</option>
+                                        <option>ул. 8-й воздушной армии, 28а, Волгоград</option>
+                                        <option></option>
+                                        <option>ул. Р.-Крестьянская, 3 - Ворошиловский район</option>
+                                        <option>50 лет Октября, 20А - Красноармейский район</option>
+                                        <option>ТЦ Космос - Кировский район</option>
+                                        <option>Волжский б-р, Профсоюзов, 7Б</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
