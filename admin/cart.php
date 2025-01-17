@@ -2,15 +2,34 @@
 require_once 'connect_bd.php'; // Подключение к базе данных
 
 // Обработка изменения состояния выполнения заказа
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'])) {
-    $order_id = $_POST['order_id'];
-    $completed = $_POST['completed'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['order_id']) && isset($_POST['completed'])) {
+        $order_id = $_POST['order_id'];
+        $completed = $_POST['completed'];
 
-    $stmt = $conn->prepare("UPDATE making_an_order SET completed = ? WHERE id = ?");
-    $stmt->bind_param("ii", $completed, $order_id);
-    $stmt->execute();
-    $stmt->close();
-    exit;
+        $stmt = $conn->prepare("UPDATE making_an_order SET completed = ? WHERE id = ?");
+        $stmt->bind_param("ii", $completed, $order_id);
+        $stmt->execute();
+        $stmt->close();
+        exit;
+    }
+
+    if (isset($_POST['delete_order_id'])) {
+        $order_id = $_POST['delete_order_id'];
+
+        $stmt = $conn->prepare("DELETE FROM making_an_order WHERE id = ?");
+        $stmt->bind_param("i", $order_id);
+        $stmt->execute();
+        $stmt->close();
+        exit;
+    }
+
+    if (isset($_POST['clear_db'])) {
+        $stmt = $conn->prepare("DELETE FROM making_an_order");
+        $stmt->execute();
+        $stmt->close();
+        exit;
+    }
 }
 
 $sql = "SELECT * FROM making_an_order ORDER BY completed ASC, id DESC";
@@ -18,21 +37,34 @@ $result = $conn->query($sql);
 
 $orders = [];
 $total_income = 0;
+$product_totals = []; // Массив для хранения сумм по каждому товару
+
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $orders[] = $row;
         $cart_items = json_decode($row['cart'], true);
+        
         if (json_last_error() === JSON_ERROR_NONE && is_array($cart_items)) {
             foreach ($cart_items as $item) {
-                $total_income += $item['price'];
+                $product_name = $item['name'];
+                $item_total = $item['price'] * $item['quantity'];
+                
+                // Если товар уже есть в массиве, добавляем к его сумме
+                if (isset($product_totals[$product_name])) {
+                    $product_totals[$product_name] += $item_total;
+                } else {
+                    // Если товара еще нет, инициализируем его сумму
+                    $product_totals[$product_name] = $item_total;
+                }
             }
         }
     }
+    // Теперь суммируем все значения в $product_totals для получения общего дохода
+    $total_income = array_sum($product_totals);
 } else {
     echo "Нет данных для отображения.";
     exit;
 }
-
 $conn->close();
 ?>
 
@@ -124,6 +156,47 @@ $conn->close();
                     });
                 });
             });
+
+            // Обработчик для кнопок удаления заказа
+            const deleteButtons = document.querySelectorAll('.delete-order-button');
+            let orderIdToDelete;
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    orderIdToDelete = this.dataset.orderId;
+                    const deleteOrderModal = new bootstrap.Modal(document.getElementById('confirmDeleteOrderModal'));
+                    deleteOrderModal.show();
+                });
+            });
+
+            document.getElementById('confirmDeleteOrderButton').addEventListener('click', function() {
+                fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `delete_order_id=${orderIdToDelete}`
+                }).then(() => {
+                    location.reload();
+                });
+            });
+
+            // Обработчик для кнопки очистки БД
+            document.getElementById('clearDbButton').addEventListener('click', function() {
+                const clearDbModal = new bootstrap.Modal(document.getElementById('confirmClearDbModal'));
+                clearDbModal.show();
+            });
+
+            document.getElementById('confirmClearDbButton').addEventListener('click', function() {
+                fetch('', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'clear_db=1'
+                }).then(() => {
+                    location.reload();
+                });
+            });
         });
     </script>
 </head>
@@ -146,7 +219,6 @@ $conn->close();
 
                 <div class="table-responsive table-container">
                     <table class="table table-striped table-dark table-columns">
-                         
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -156,6 +228,7 @@ $conn->close();
                                 <th>Корзина</th>
                                 <th>Детали заказа</th>
                                 <th>Выполнен</th>
+                                <th>Удалить</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -177,9 +250,10 @@ $conn->close();
                                             if (json_last_error() === JSON_ERROR_NONE && is_array($cart_items)) {
                                                 foreach ($cart_items as $item) {
                                                     $size = isset($item['size']) && !empty($item['size']) ? htmlspecialchars($item['size']) : 'Размер не был указан';
+                                                    $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
                                                     echo '<div>';
                                                     echo '<img src="../image/' . htmlspecialchars($item['image']) . '" alt="' . htmlspecialchars($item['name']) . '">';
-                                                    echo '<p>' . htmlspecialchars($item['name']) . ' - ' . htmlspecialchars($item['price']) . '₽<br>Размер: ' . $size . '</p>';
+                                                    echo '<p>' . htmlspecialchars($item['name']) . ' - ' . htmlspecialchars($item['price']) . '₽<br>Размер: ' . $size . '<br>Количество: ' . $quantity . '</p>';
                                                     echo '</div>';
                                                 }
                                             } else {
@@ -192,15 +266,55 @@ $conn->close();
                                     <td>
                                         <input type="checkbox" class="form-check-input order-checkbox" data-order-id="<?php echo $order['id']; ?>" <?php echo $order['completed'] ? 'checked' : ''; ?>>
                                     </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm delete-order-button" data-order-id="<?php echo $order['id']; ?>">Удалить</button>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
+                <button id="clearDbButton" class="btn btn-danger mt-3">Очистить БД</button>
             </main>
         </div>
     </div>
+    <!-- Модальное окно для подтверждения удаления заказа -->
+    <div class="modal fade" id="confirmDeleteOrderModal" tabindex="-1" aria-labelledby="confirmDeleteOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteOrderModalLabel" style="color: black;">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="color: black;">
+                    Вы уверены, что хотите удалить этот заказ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteOrderButton">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Модальное окно для подтверждения очистки базы данных -->
+    <div class="modal fade" id="confirmClearDbModal" tabindex="-1" aria-labelledby="confirmClearDbModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmClearDbModalLabel" style="color: black;">Подтверждение очистки базы данных</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="color: black;">
+                    Вы уверены, что хотите очистить базу данных?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmClearDbButton">Очистить</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Подключение Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

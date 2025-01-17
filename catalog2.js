@@ -34,11 +34,11 @@ function loadCatalog(category) {
 
       productCard.innerHTML = `
         <div class="card h-100" style="cursor: pointer;">
-          <img src="${product.images[0]}" class="card-img-top" alt="${product.name}"> <!-- Используем первое изображение для предпросмотра -->
+          <img src="image/${product.images[0]}" class="card-img-top" alt="${product.name}"> <!-- Используем первое изображение для предпросмотра -->
           <div class="card-body">
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">${product.price}₽</p>
-            <button class="btn btn-primary mt-2" onclick="addToCart('${product.name}', ${product.price}, '${product.images[0]}')">Добавить в корзину</button>
+            <button class="btn btn-primary mt-2" onclick="addToCart('${product.name}', ${product.price}, 'image/${product.images[0]}')">Добавить в корзину</button>
             <p class="card-text"><br></p>
             <span class="view-details" onclick="showProductModal('${product.name}', ${product.price}, '${product.description}', ${JSON.stringify(product.images)}, ${JSON.stringify(product.sizes)}); event.stopPropagation();">
               👁 Подробнее
@@ -84,7 +84,7 @@ function loadCatalog(category) {
       const isActive = index === 0 ? 'active' : ''; // Первая картинка активная
       productImagesContainer.innerHTML += `
         <div class="carousel-item ${isActive}">
-          <img src="${image}" class="d-block w-100" alt="${name}">
+          <img src="image/${image}" class="d-block w-100" alt="${name}">
         </div>
       `;
     });
@@ -153,7 +153,7 @@ function loadCatalog(category) {
 
   
   function addToCart(name, price, image, size) {
-      const productIndex = window.cart.findIndex(product => product.name === name && product.size === size);
+      const productIndex = window.cart.findIndex(product => product.name === name && product.size === size && product.image === image);
       if (productIndex === -1) {
           // Если товара нет в корзине, добавляем его
           const product = { name, price, image, size, checked: false, quantity: 1 };

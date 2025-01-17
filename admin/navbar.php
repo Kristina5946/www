@@ -28,11 +28,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="person.php">
-                    <i class="bi bi-person"></i> Аутентификация
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="gear.php">
                     <i class="bi bi-gear"></i> Настройки
                 </a>

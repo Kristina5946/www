@@ -127,7 +127,6 @@
                                     <select class="form-select" id="deliveryAddress">
                                         <option selected disabled>Выберите адрес</option>
                                         <option>ул. 8-й воздушной армии, 28а, Волгоград</option>
-                                        <option></option>
                                         <option>ул. Р.-Крестьянская, 3 - Ворошиловский район</option>
                                         <option>50 лет Октября, 20А - Красноармейский район</option>
                                         <option>ТЦ Космос - Кировский район</option>

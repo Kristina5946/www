@@ -105,10 +105,15 @@
         </div>
       </div>
     </div>
+    
     <!-- Нижняя часть страницы (подвал) -->
     <div class="footer">
-        <?php include 'footer.php'; ?>
+        <?php 
+        include 'footer_bd.php';
+        echo $section['text'];
+         ?>
     </div>
+
     
     <!-- Добавление иконки ватсапа для свзи изменить номер!!!!! -->
     <a href="https://wa.me/89061727947" class="whatsapp-icon" target="_blank">

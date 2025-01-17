@@ -41,6 +41,29 @@ if ($result->num_rows > 0) {
     $promoSectionItems = [];
 }
 
+// Получение данных для footer
+$sql = "SELECT * FROM footer";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $footerItems[] = $row;
+    }
+} else {
+    $footerItems = [];
+}
+
+// Получение данных для contacts_text
+$sql = "SELECT * FROM contacts_text";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $contactItems[] = $row;
+    }
+} else {
+    $contactItems = [];
+}
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -169,7 +192,6 @@ $conn->close();
                                         <th>Описание</th>
                                         <th>Видео</th>
                                         <th>Изменить</th>
-                                        <th>Удалить</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -194,9 +216,7 @@ $conn->close();
                                                     data-description="<?= htmlspecialchars($item['description']) ?>" 
                                                     data-video="<?= htmlspecialchars($item['video']) ?>">Изменить</button>
                                         </td>
-                                        <td>
-                                            <button class="btn btn-delete btn-sm" onclick="deleteItem(<?= $item['id'] ?>)">Удалить</button>
-                                        </td>
+                                        
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>
@@ -213,7 +233,6 @@ $conn->close();
                                         <th>Цена</th>
                                         <th>Картинка</th>
                                         <th>Изменить</th>
-                                        <th>Удалить</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -237,9 +256,7 @@ $conn->close();
                                                         data-price="<?= htmlspecialchars($item['price']) ?>" 
                                                         data-image="<?= htmlspecialchars($item['image']) ?>">Изменить</button>
                                             </td>
-                                            <td>
-                                                <button class="btn btn-delete btn-sm" onclick="deletePromoItem(<?= $item['id'] ?>)">Удалить</button>
-                                            </td>
+                                            
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -255,7 +272,6 @@ $conn->close();
                                         <th>Категория</th>
                                         <th>Картинка</th>
                                         <th>Изменить</th>
-                                        <th>Удалить</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -277,14 +293,13 @@ $conn->close();
                                                         data-category="<?= htmlspecialchars($item['category']) ?>" 
                                                         data-image="<?= htmlspecialchars($item['image']) ?>">Изменить</button>
                                             </td>
-                                            <td>
-                                                <button class="btn btn-delete btn-sm" onclick="deletePromoSectionItem(<?= $item['id'] ?>)">Удалить</button>
-                                            </td>
+
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>
                         </div>
+
 
                         <!-- Каталог -->
                         <div id="catalogSection" class="rounded-block">
@@ -352,7 +367,106 @@ $conn->close();
                             </div>
                             <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addProductModal">Добавить новый товар</button>
                         </div>
-
+                        <!-- Таблица для изменения футера -->
+                        <div id="footerSection" class="rounded-block">
+                            <h3>Изменение футера</h3>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-bordered table-hover mt-3">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Текст</th>
+                                            <th>Изменить</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($footerItems as $item): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($item['text']) ?></td>
+                                                <td>
+                                                    <button class="btn btn-edit btn-sm" data-bs-toggle="modal" data-bs-target="#editFooterModal" 
+                                                            data-id="<?= $item['id'] ?>" 
+                                                            data-text="<?= htmlspecialchars($item['text']) ?>">Изменить</button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Таблица для изменения контактов -->
+                        <div id="contactsSection" class="rounded-block">
+                            <h3>Изменение контактов</h3>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-bordered table-hover mt-3">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Текст</th>
+                                            <th>Изменить</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($contactItems as $item): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($item['text']) ?></td>
+                                                <td>
+                                                    <button class="btn btn-edit btn-sm" data-bs-toggle="modal" data-bs-target="#editContactModal" 
+                                                            data-id="<?= $item['id'] ?>" 
+                                                            data-text="<?= htmlspecialchars($item['text']) ?>">Изменить</button>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Модальное окно для изменения текста контактов -->
+                        <div class="modal fade" id="editContactModal" tabindex="-1" aria-labelledby="editContactModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editContactModalLabel" style="color: black;">Изменить текст контактов</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form id="editContactForm" method="post" action="update_contacts.php">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="id" id="editContactId">
+                                            <div class="mb-3">
+                                                <label for="editContactText" class="form-label" style="color: black;">Текст</label>
+                                                <textarea class="form-control" id="editContactText" name="text" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Модальное окно для изменения текста футера -->
+                        <div class="modal fade" id="editFooterModal" tabindex="-1" aria-labelledby="editFooterModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editFooterModalLabel" style="color: black;">Изменить текст футера</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form id="editFooterForm" method="post" action="update_footer.php">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="id" id="editFooterId">
+                                            <div class="mb-3">
+                                                <label for="editFooterText" class="form-label" style="color: black;">Текст</label>
+                                                <textarea class="form-control" id="editFooterText" name="text" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Модальное окно для редактирования товара -->
                         <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -617,7 +731,24 @@ $conn->close();
             document.getElementById('editProductImages').value = images;
 
         });
+        const editFooterModal = document.getElementById('editFooterModal');
+        editFooterModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const text = button.getAttribute('data-text');
 
+            document.getElementById('editFooterId').value = id;
+            document.getElementById('editFooterText').value = text;
+        });
+        const editContactModal = document.getElementById('editContactModal');
+        editContactModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const text = button.getAttribute('data-text');
+
+            document.getElementById('editContactId').value = id;
+            document.getElementById('editContactText').value = text;
+        });
 
         function deleteItem(id) {
             if (confirm('Вы уверены, что хотите удалить эту запись?')) {

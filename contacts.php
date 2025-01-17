@@ -16,28 +16,10 @@
       <div class="container bg-overlay p-5 rounded-3 shadow-lg">
         <div class="row">
           <!-- Колонка контактов -->
-          <div class="col-md-6 text-start text-dark">
-            <h2>Контакты</h2>
-            <p>📞 +7 (988) 005-49-18</p>
-            <p>👉 @pro_sport_34</p>
-            <p>👉 @pro_sport_34_boy</p>
-            <p>📍 ул. 8-й воздушной армии, 28а, Волгоград</p>
-            <div class="social-icons mt-3">
-              <a href="#" class="me-3"><i class="fab fa-vk fa-2x"></i></a>
-              <a href="#"><i class="fab fa-avito fa-2x"></i></a>
-            </div>
-          </div>
-          
-          <!-- Колонка пунктов выдачи -->
-          <div class="col-md-6 text-start text-dark">
-            <h2>Пункты выдачи</h2>
-            <ul class="list-unstyled">
-              <li>🔸 ул. Р.-Крестьянская, 3 - Ворошиловский район</li>
-              <li>🔸 50 лет Октября, 20А - Красноармейский район</li>
-              <li>🔸 ТЦ Космос - Кировский район</li>
-              <li>🔸 Волжский б-р, Профсоюзов, 7Б</li>
-            </ul>
-          </div>
+          <?php
+          include 'contacts_text.php';
+          echo $section['text'];
+          ?>
         </div>
         <!-- Карта -->
         <div class="row mt-4">
@@ -52,12 +34,15 @@
 
     <!-- Нижняя часть страницы (подвал) -->
     <div class="footer">
-        <?php include 'footer.php'; ?>
+        <?php 
+        include 'footer_bd.php';
+        echo $section['text'];
+         ?>
     </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="catalog.js"></script>
+    <script src="catalog2.js"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <!-- Popper.js -->

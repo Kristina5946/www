@@ -1,3 +1,16 @@
+<?php
+require_once 'bd_products.php'; // Подключение к базе данных
+
+$query = "SELECT * FROM feedback ORDER BY completed ASC, id DESC";
+$result = $conn->query($query);
+
+$feedbacks = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $feedbacks[] = $row;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -24,14 +37,67 @@
                 </div>
 
                 <div class="row">
-                    <!-- Карточка 1 -->
-                    <div class="col-md-4 mb-3">
+                <!-- Таблица с обращениями клиентов -->
+                    <div class="col-md-12 mb-3">
                         <div class="card p-3">
-                            <h5 class="card-title">Доход</h5>
-        </div>
-    </div>
+                            <h5 class="card-title">Обращения клиентов</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-dark table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Имя</th>
+                                            <th>Телефон</th>
+                                            <th>Email</th>
+                                            <th>Вопрос</th>
+                                            <th>Выполнено</th>
+                                            <th>Заметка</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($feedbacks as $feedback): ?>
+                                            <tr>
+                                                <td><?= htmlspecialchars($feedback['id']) ?></td>
+                                                <td><?= htmlspecialchars($feedback['name']) ?></td>
+                                                <td><?= htmlspecialchars($feedback['phone']) ?></td>
+                                                <td><?= htmlspecialchars($feedback['email']) ?></td>
+                                                <td><?= htmlspecialchars($feedback['question']) ?></td>
+                                                <td>
+                                                    <input type="checkbox" class="form-check-input" <?= $feedback['completed'] ? 'checked' : '' ?> onclick="toggleCompleted(<?= $feedback['id'] ?>, this.checked)">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" value="<?= htmlspecialchars($feedback['note']) ?>" onblur="updateNote(<?= $feedback['id'] ?>, this.value)">
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
 
     <!-- Подключение Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleCompleted(id, completed) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'update_feedback.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send('id=' + id + '&completed=' + completed);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    location.reload();
+                }
+            };
+        }
+
+        function updateNote(id, note) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'update_feedback.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send('id=' + id + '&note=' + encodeURIComponent(note));
+        }
+    </script>
 </body>
 </html>
