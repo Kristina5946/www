@@ -29,33 +29,33 @@
 
       <!-- Скрипт переключения -->
       <script>
-          function loadScript(scriptSrc) {
-              // Удаляем старые скрипты
-              document.querySelectorAll('script[data-dynamic="true"]').forEach(script => script.remove());
+        function loadScript(scriptSrc) {
+            // Удаляем старые скрипты
+            document.querySelectorAll('script[data-dynamic="true"]').forEach(script => script.remove());
 
-              // Загружаем новый скрипт
-              const script = document.createElement('script');
-              script.src = scriptSrc;
-              script.setAttribute('data-dynamic', 'true');
-              document.body.appendChild(script);
-          }
+            // Загружаем новый скрипт
+            const script = document.createElement('script');
+            script.src = scriptSrc;
+            script.setAttribute('data-dynamic', 'true');
+            document.body.appendChild(script);
+        }
 
-          // Загрузка скриптов при различных действиях
-          document.getElementById('search-form').addEventListener('submit', (event) => {
-              event.preventDefault(); // Отмена стандартного действия формы
-              loadScript('catalog.js'); // Загружаем скрипт для поиска
-              const query = document.getElementById('search-query').value.trim();
-              if (query) {
-                  // Выполняем поиск
-                  searchCatalog(query);
-              } else {
-                  alert('Введите поисковый запрос!');
-              }
-          });
-          
-          // Инициализация каталога по умолчанию
-          loadScript('catalog2.js'); // Загружаем стандартный скрипт для просмотра каталога
-      </script>
+        // Загрузка скриптов при различных действиях
+        document.getElementById('search-form').addEventListener('submit', (event) => {
+            event.preventDefault(); // Отмена стандартного действия формы
+            const query = document.getElementById('search-query').value.trim();
+            if (query) {
+                loadScript('catalog.js'); // Загружаем скрипт для поиска
+                // Выполняем поиск
+                searchCatalog(query);
+            } else {
+                alert('Введите поисковый запрос!');
+            }
+        });
+
+        // Инициализация каталога по умолчанию
+        loadScript('catalog2.js'); // Загружаем стандартный скрипт для просмотра каталога
+    </script>
 
       <div class="d-flex justify-content-center mb-4">
         <button class="btn btn-primary me-2" onclick="showGirlsCatalog()">Девочки</button>
@@ -71,7 +71,23 @@
         </div>
       </div>
     </div>  
-
+    <!-- Модальное окно избранного -->
+    <div class="modal fade" id="favoritesModal" tabindex="-1" aria-labelledby="favoritesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="favoritesModalLabel">Избранное</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Избранное пусто. Добавьте товары в избранное.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Модальное окно -->
     <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -132,12 +148,10 @@
             width: 60px; /* Настройте размер иконки */
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
-
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    
 </body>
 </html>

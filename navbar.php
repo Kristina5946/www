@@ -25,6 +25,7 @@
                         </button>
                     </form>
                 </li>
+
                 <script>
                     // Обработка формы навигационного поиска
                     function passSearchQuery(event) {
@@ -63,6 +64,10 @@
                     <button type="button" class="btn btn-cart" data-bs-toggle="modal" data-bs-target="#cart-modal">
                         <img src="image/корзина.png" alt="Корзина" class="icon">
                     </button>
+                    <button type="button" class="btn btn-cart" data-bs-toggle="modal" data-bs-target="#favoritesModal">
+                        <img src="image/избранное2.png" alt="Избранное" class="icon">
+                    </button>
+
                 </li>
             </ul>
         </div>
@@ -153,3 +158,23 @@
         </div>
     </div>
 </div>
+<!-- Модальное окно для избранного -->
+<div class="modal fade" id="favoritesModal" tabindex="-1" aria-labelledby="favoritesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="favoritesModalLabel">Избранное</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Здесь будет отображаться список избранных товаров -->
+                <p>Избранное пусто. Добавьте товары в избранное.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" onclick="addSelectedFavoritesToCart() ">Добавить в корзину</button>
+            </div>
+        </div>
+    </div>
+</div>
+
