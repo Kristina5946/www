@@ -1,4 +1,15 @@
 <?php
+session_start();
+// Проверка времени последней активности
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 600)) {
+    // Если прошло более 10 минут (600 секунд) с момента последней активности
+    session_unset();
+    session_destroy();
+    header("Location: ../login.php");
+    exit();
+}
+?>
+<?php
 require_once 'connect_bd.php'; // Подключение к базе данных
 
 // Обработка изменения состояния выполнения заказа
@@ -216,7 +227,6 @@ $conn->close();
                     <h4>Общий доход</h4>
                     <p class="fs-4"><?php echo number_format($total_income, 2, ',', ' '); ?>₽</p>
                 </div>
-
                 <div class="table-responsive table-container">
                     <table class="table table-striped table-dark table-columns">
                         <thead>
@@ -275,9 +285,10 @@ $conn->close();
                     </table>
                 </div>
                 <button id="clearDbButton" class="btn btn-danger mt-3">Очистить БД</button>
-            </main>
+                </main>
         </div>
     </div>
+    
     <!-- Модальное окно для подтверждения удаления заказа -->
     <div class="modal fade" id="confirmDeleteOrderModal" tabindex="-1" aria-labelledby="confirmDeleteOrderModalLabel" aria-hidden="true">
         <div class="modal-dialog">

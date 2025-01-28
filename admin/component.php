@@ -1,4 +1,15 @@
 <?php
+session_start();
+// Проверка времени последней активности
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 600)) {
+    // Если прошло более 10 минут (600 секунд) с момента последней активности
+    session_unset();
+    session_destroy();
+    header("Location: ../login.php");
+    exit();
+}
+?>
+<?php
 // Подключение к базе данных
 include '../carousel_bd.php';
 
@@ -14,6 +25,7 @@ if ($result->num_rows > 0) {
 } else {
     $carouselItems = [];
 }
+
 
 // Получение данных для карусели товаров
 $sql = "SELECT * FROM carouseproduct";
@@ -536,6 +548,7 @@ $conn->close();
                                     <div class="mb-3">
                                         <label for="editVideo" class="form-label" style="color: black;">Видео</label>
                                         <input type="file" class="form-control" id="editVideo" name="video">
+                                        <input type="hidden" id="currentVideo" name="current_video">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -778,7 +791,3 @@ $conn->close();
 </body>
 </html>
 
-
-<script>
-    
-</script>

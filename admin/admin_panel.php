@@ -1,6 +1,10 @@
 <?php
 session_start();
-if (!isset($_SESSION['login'])) {
+// Проверка времени последней активности
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 600)) {
+    // Если прошло более 10 минут (600 секунд) с момента последней активности
+    session_unset();
+    session_destroy();
     header("Location: ../login.php");
     exit();
 }
@@ -60,7 +64,7 @@ if (!isset($_SESSION['login'])) {
                 </style>
 
                 <div class="screenshot-container">
-                    <img src="../image/Измени возможности сайта.png" alt="Скриншот сайта" ">
+                    <img src="../image/Измени возможности сайта.png" alt="Скриншот сайта">
                     <div class="overlay"></div>
                 </div>
             </main>

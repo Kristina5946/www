@@ -377,7 +377,7 @@ function updateFavoritesUI() {
                 product.name,
                 product.price,
                 product.description || "Описание отсутствует",
-                product.images || [product.image],
+                [product.images] || [product.image],
                 product.sizes || []
             );
         };
@@ -436,7 +436,7 @@ function updateFavoritesUI2() {
                 product.name,
                 product.price,
                 product.description || "Описание отсутствует",
-                product.images || [product.image],
+                [product.images] || [product.image],
                 product.sizes || []
             );
         };

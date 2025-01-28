@@ -3,27 +3,39 @@
     <form class="order-form mx-auto" style="max-width: 600px;" id="feedbackForm">
         <h4>Свяжитесь с нами</h4>
         <div class="row g-3">
+            <!-- Первая строка: Имя и Телефон -->
             <div class="col-md-6">
-                <input type="text" class="form-control" id="name" placeholder="Имя" required>
+                <label for="feedback-name" class="form-label">Ваше имя</label>
+                <input type="text" class="form-control" id="feedback-name" name="name" required>
+                <div class="invalid-feedback">Пожалуйста, заполните поле имени.</div>
             </div>
             <div class="col-md-6">
-                <input type="tel" class="form-control" id="phone" placeholder="Телефон" required>
+                <label for="feedback-phone" class="form-label">Ваш телефон</label>
+                <input type="tel" class="form-control" id="feedback-phone" name="phone" required>
+                <div class="invalid-feedback">Пожалуйста, заполните поле телефона.</div>
+            </div>
+            <!-- Вторая строка: Email и Сообщение -->
+            <div class="col-md-6">
+                <label for="feedback-email" class="form-label">Ваш Email</label>
+                <input type="email" class="form-control" id="feedback-email" name="email" required>
+                <div class="invalid-feedback">Пожалуйста, введите действительный Email.</div>
             </div>
             <div class="col-md-6">
-                <input type="email" class="form-control" id="email" placeholder="Email" required>
-            </div>
-            <div class="col-md-6">
-                <textarea class="form-control" id="question" rows="3" placeholder="Опишите ваш вопрос..." required></textarea>
+                <label for="feedback-message" class="form-label">Сообщение</label>
+                <textarea class="form-control" id="feedback-message" name="question" rows="1" required></textarea>
+                <div class="invalid-feedback">Пожалуйста, заполните поле сообщения.</div>
             </div>
         </div>
+        <!-- Чекбокс согласия -->
         <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="terms" required>
             <label class="form-check-label" for="terms">
                 Я прочитал(а) и соглашаюсь с <a href="#" id="termsLink">правилами и условиями</a>
             </label>
         </div>
+        <!-- Кнопка отправки -->
         <div class="text-center mt-4">
-            <button type="submit" class="btn order-btn" disabled>Связаться</button>
+            <button type="submit" class="btn order-btn" id="submitFeedback" disabled>Связаться</button>
         </div>
         <!-- Модальное окно для правил -->
         <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
@@ -66,68 +78,51 @@
 <script>
     // Обработчик для чекбокса "Согласие с условиями"
     document.getElementById('terms').addEventListener('change', function(event) {
-        const submitButton = document.querySelector('.order-btn');
-        submitButton.disabled = !event.target.checked; // Активируем кнопку если чекбокс выбран
+        const submitButton = document.querySelector('#submitFeedback');
+        submitButton.disabled = !event.target.checked;
     });
 
-    // Обработчик для ссылки "правила и условия"
     document.getElementById('termsLink').addEventListener('click', function(event) {
-        event.preventDefault(); // Отменяем стандартное действие ссылки
+        event.preventDefault();
         const termsModal = new bootstrap.Modal(document.getElementById('termsModal'));
         termsModal.show();
     });
 
-    // Обработчик для отправки формы
-    document.getElementById('feedbackForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Отменяем стандартное действие формы
+    document.querySelector('#submitFeedback').addEventListener('click', (event) => {
+        event.preventDefault();
 
-        const name = document.getElementById('name').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const question = document.getElementById('question').value.trim();
+        const name = document.getElementById('feedback-name').value.trim();
+        const phone = document.getElementById('feedback-phone').value.trim();
+        const email = document.getElementById('feedback-email').value.trim();
+        const message = document.getElementById('feedback-message').value.trim();
 
-        // Вывод значений полей в консоль для отладки
-        console.log('Name:', name);
-        console.log('Phone:', phone);
-        console.log('Email:', email);
-        console.log('Question:', question);
-
-        if (!name || !phone || !email || !question) {
-            alert('Пожалуйста, заполните все поля.');
+        if (!name || !phone || !email || !message) {
+            if (!name) document.getElementById('feedback-name').classList.add('is-invalid');
+            if (!phone) document.getElementById('feedback-phone').classList.add('is-invalid');
+            if (!email) document.getElementById('feedback-email').classList.add('is-invalid');
+            if (!message) document.getElementById('feedback-message').classList.add('is-invalid');
             return;
         }
-        
-        // Отправляем данные на сервер
+
         fetch('submit_feedback.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                name: name,
-                phone: phone,
-                email: email,
-                question: question,
-            }),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ name, phone, email, question: message }),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Ошибка сети: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.error) {
-                alert('Ошибка: ' + data.error);
-            } else {
-                alert(data.message); // Показываем сообщение об успешной отправке
-                document.getElementById('feedbackForm').reset(); // Очищает поля формы
-                document.querySelector('.order-btn').disabled = true; // Деактивируем кнопку
-            }
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте еще раз.');
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Ошибка: ' + data.error);
+                } else {
+                    alert('Спасибо за ваше сообщение!');
+                    document.getElementById('feedbackForm').reset();
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка. Пожалуйста, попробуйте позже.');
+            });
     });
+
+
 </script>
