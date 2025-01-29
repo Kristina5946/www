@@ -262,7 +262,7 @@ $conn->close();
                                                     $size = isset($item['size']) && !empty($item['size']) ? htmlspecialchars($item['size']) : 'Размер не был указан';
                                                     $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
                                                     echo '<div>';
-                                                    echo '<img src="../image/' . htmlspecialchars($item['image']) . '" alt="' . htmlspecialchars($item['name']) . '">';
+                                                    echo '<img src="../' . htmlspecialchars($item['image']) . '" alt="' . htmlspecialchars($item['name']) . '">';
                                                     echo '<p>' . htmlspecialchars($item['name']) . ' - ' . htmlspecialchars($item['price']) . '₽<br>Размер: ' . $size . '<br>Количество: ' . $quantity . '</p>';
                                                     echo '</div>';
                                                 }

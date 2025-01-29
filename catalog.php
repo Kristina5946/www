@@ -121,6 +121,28 @@
         </div>
       </div>
     </div>
+    <!-- Модальное окно -->
+    <div class="modal fade" id="uniqueProductModal" tabindex="-1" aria-labelledby="uniqueProductModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="uniqueProductModalLabel">Название товара</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+            <div id="uniqueCarouselExample" class="carousel slide" data-bs-ride="false">
+              <div class="carousel-inner" id="uniqueProductImages"></div>
+            </div>
+            <p id="uniqueProductDescription">Подробное описание товара...</p>
+            <p class="fw-bold">Цена: <span id="uniqueProductPrice">1500₽</span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     
     <!-- Нижняя часть страницы (подвал) -->
     <div class="footer">

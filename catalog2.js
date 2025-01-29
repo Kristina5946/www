@@ -312,7 +312,8 @@ function toggleFavorite(button) {
     const card = button.closest('.card');
     const name = card.querySelector('.card-title').textContent;
     const price = parseFloat(card.querySelector('.card-text').textContent.replace('₽', '').trim());
-    const image = card.querySelector('img').src;
+    const imageElement = card.querySelector('img');
+    const image = imageElement.getAttribute('src'); // Получаем относительный путь к изображению
 
     const sizes = card.dataset.sizes ? JSON.parse(card.dataset.sizes) : []; // Получаем размеры из data-атрибутов
     const selectedSize = card.querySelector('.size-selected') 
@@ -352,6 +353,30 @@ function toggleFavorite(button) {
     updateFavoritesUI();
 }
 
+function showUniqueProductModal(name, price, description, images) {
+    // Установка значений в модальном окне
+    document.getElementById('uniqueProductModalLabel').textContent = name;
+    document.getElementById('uniqueProductPrice').textContent = price;
+    document.getElementById('uniqueProductDescription').textContent = description;
+  
+    // Обработка изображений
+    const imagesContainer = document.getElementById('uniqueProductImages');
+    imagesContainer.innerHTML = ''; // Очищаем предыдущие изображения
+  
+    images.forEach((image, index) => {
+      const isActive = index === 0 ? 'active' : ''; // Устанавливаем активное изображение
+      const carouselItem = `
+        <div class="carousel-item ${isActive}">
+          <img src="${image}" class="d-block w-100" alt="Изображение уникального товара">
+        </div>`;
+      imagesContainer.insertAdjacentHTML('beforeend', carouselItem);
+    });
+  
+    // Показ модального окна
+    const modal = new bootstrap.Modal(document.getElementById('uniqueProductModal'));
+    modal.show();
+  }
+  
 function updateFavoritesUI() {
     const favoritesModalBody = document.querySelector('#favoritesModal .modal-body');
     favoritesModalBody.innerHTML = ""; // Очистить текущий контент
@@ -373,12 +398,11 @@ function updateFavoritesUI() {
 
         // Открытие модального окна при двойном клике на изображение
         img.ondblclick = () => {
-            showProductModal(
+            showUniqueProductModal(
                 product.name,
                 product.price,
                 product.description || "Описание отсутствует",
-                [product.images] || [product.image],
-                product.sizes || []
+                product.images|| [product.image]
             );
         };
 
@@ -432,12 +456,11 @@ function updateFavoritesUI2() {
 
         // Открытие модального окна при двойном клике на изображение
         img.ondblclick = () => {
-            showProductModal(
+            showUniqueProductModal(
                 product.name,
                 product.price,
                 product.description || "Описание отсутствует",
-                [product.images] || [product.image],
-                product.sizes || []
+                product.images || [product.image]
             );
         };
 
