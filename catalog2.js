@@ -1,77 +1,99 @@
-// Функция для загрузки продуктов из базы данных
-function loadCatalog(category) {
-    fetch(`bd.php?category=${category}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP ошибка! Статус: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (!Array.isArray(data)) {
-          throw new Error('Полученные данные имеют некорректный формат.');
-        }
-        showCatalog(data);
-      })
-      .catch(error => {
-        console.error('Ошибка загрузки данных:', error);
-        const catalogContainer = document.getElementById("catalog");
-        catalogContainer.innerHTML = `<p>Ошибка загрузки данных: ${error.message}</p>`;
-      });
-  }
+let currentPage = 1;
+const itemsPerPage = 3;
+let currentCategory = 'девочки'; // Категория по умолчанию
+let sortOrder = 'oldest'; // Порядок сортировки по умолчанию
 
-function showCatalog(catalog) {
+// Функция для установки порядка сортировки
+function setSortOrder(order) {
+    sortOrder = order;
+    currentPage = 1; // Сбрасываем текущую страницу
+    loadCatalog(currentCategory, currentPage);
+}
+
+// Функция для загрузки продуктов из базы данных
+function loadCatalog(category, page = 1) {
+    currentCategory = category;
+    fetch(`bd.php?category=${category}&page=${page}&itemsPerPage=${itemsPerPage}&sortOrder=${sortOrder}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ошибка! Статус: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!Array.isArray(data)) {
+                throw new Error('Полученные данные имеют некорректный формат.');
+            }
+            showCatalog(data, page);
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки данных:', error);
+            const catalogContainer = document.getElementById("catalog");
+            catalogContainer.innerHTML = `<p>Ошибка загрузки данных: ${error.message}</p>`;
+        });
+}
+
+function showCatalog(catalog, page) {
     const catalogContainer = document.getElementById("catalog");
-    catalogContainer.innerHTML = ""; // Очищаем предыдущий контент
-    if (catalog.length === 0) {
+    if (page === 1) {
+        catalogContainer.innerHTML = ""; // Очищаем предыдущий контент только при первой загрузке
+    }
+
+    if (catalog.length === 0 && page === 1) {
         catalogContainer.innerHTML = `<p>Товар не найден.</p>`;
         return;
     }
 
     catalog.forEach(product => {
         const productCard = document.createElement("div");
-        productCard.className = "col";
+        productCard.className = "col-12 col-md-6 col-lg-3 mb-4";
 
-    productCard.innerHTML = `
-        <div class="card h-100" style="cursor: pointer;">
-        <img src="image/${product.images[0]}" class="card-img-top" alt="${product.name}"> <!-- Используем первое изображение для предпросмотра -->
-        <div class="card-body">
-        <h5 class="card-title">${product.name}</h5>
-        <p class="card-text">${product.price}₽</p>
-        <button class="btn btn-primary mt-2" onclick="addToCart('${product.name}', ${product.price}, 'image/${product.images[0]}')">Добавить в корзину</button>
-        <p class="card-text"><br></p>
-        <span class="view-details" onclick="showProductModal('${product.name}', ${product.price}, '${product.description}', ${JSON.stringify(product.images)}, ${JSON.stringify(product.sizes)}); event.stopPropagation();">
-            👁 Подробнее
-            <button class="btn btn-outline-secondary" onclick="toggleFavorite(this)">
-            <img src="image/избр2.png" alt="Избранное" style="width: 20px; height: 20px;">
-        </button>
-        </span>
-        
-        </div>
-        </div>
-    `;
-
-        // Добавляем обработчик двойного клика на карточку
+        productCard.innerHTML = `
+            <div class="card h-100" style="cursor: pointer;">
+                <img src="image/${product.images[0]}" class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">${product.price}₽</p>
+                    <button class="btn btn-primary mt-2" onclick="addToCart('${product.name}', ${product.price}, 'image/${product.images[0]}')">Добавить в корзину</button>
+                    <p class="card-text"><br></p>
+                    <span class="view-details" onclick="showProductModal('${product.name}', ${product.price}, '${product.description}', ${JSON.stringify(product.images)}, ${JSON.stringify(product.sizes)}); event.stopPropagation();">
+                        👁 Подробнее
+                        <button class="btn btn-outline-secondary" onclick="toggleFavorite(this)">
+                            <img src="image/избр2.png" alt="Избранное" style="width: 20px; height: 20px;">
+                        </button>
+                    </span>
+                </div>
+            </div>
+        `;
         productCard.addEventListener("dblclick", () => {
-        showProductModal(product.name, product.price, product.description, product.images, product.sizes);
+            showProductModal(product.name, product.price, product.description, product.images, product.sizes);
         });
 
         catalogContainer.appendChild(productCard);
     });
 }
-  
+
+function loadMore() {
+    currentPage++;
+    loadCatalog(currentCategory, currentPage);
+}
+
+
+
 // Функции для переключения обложки и каталога
 function showGirlsCatalog() {
+    currentPage = 1; // Сбрасываем текущую страницу
     document.getElementById("category-name").innerText = "гимнастики";
     document.querySelector(".cover").style.backgroundImage = "url('image/фон_для_девочек.jpg')";
     loadCatalog('девочки');
-    }
+}
 
 function showBoysCatalog() {
+    currentPage = 1; // Сбрасываем текущую страницу
     document.getElementById("category-name").innerText = "единоборства";
     document.querySelector(".cover").style.backgroundImage = "url('image/фон_для_мальчиков.jpg')";
     loadCatalog('мальчики');
-    }
+}
 
   // Функция для показа модального окна с деталями товара
 
@@ -188,8 +210,15 @@ function showProductModal(name, price, description, images, sizes) {
   }
  
   // Инициализация каталога девочек по умолчанию
-  document.addEventListener("DOMContentLoaded", () => showGirlsCatalog());
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('loadMoreButton').addEventListener('click', loadMore);
 
+    // Восстанавливаем состояние корзины и избранного из localStorage
+    restoreState();
+
+    // Инициализация каталога девочек по умолчанию
+    showGirlsCatalog();
+});
 
   // Обработчик нажатия на кнопку "Оформить заказ" в модальном окне корзины
 document.querySelector('#checkoutButton').addEventListener('click', () => {
@@ -636,7 +665,7 @@ function updateTotal() {
 }
 
 // Событие при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
+function restoreState() {
     // Восстанавливаем состояние корзины и избранного из localStorage
     const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -647,5 +676,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Обновляем интерфейс
     updateCartUI();
     updateFavoritesUI();
+}
+document.addEventListener('DOMContentLoaded', () => {
+    restoreState();
+});
 
-    });

@@ -15,6 +15,11 @@ $conn->set_charset("utf8mb4");
 
 $category = $_GET['category'] ?? '';
 $query = $_GET['query'] ?? '';
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$itemsPerPage = isset($_GET['itemsPerPage']) ? (int)$_GET['itemsPerPage'] : 16;
+$sortOrder = $_GET['sortOrder'] ?? 'oldest';
+
+$offset = ($page - 1) * $itemsPerPage;
 
 $sql = "SELECT * FROM products2 WHERE 1=1";
 $params = [];
@@ -34,6 +39,28 @@ if ($query) {
         $types .= "s";
     }
 }
+
+// Добавляем сортировку
+switch ($sortOrder) {
+    case 'price_asc':
+        $sql .= " ORDER BY price ASC";
+        break;
+    case 'price_desc':
+        $sql .= " ORDER BY price DESC";
+        break;
+    case 'newest':
+        $sql .= " ORDER BY id DESC"; // Предполагается, что id увеличивается с добавлением новых товаров
+        break;
+    case 'oldest':
+    default:
+        $sql .= " ORDER BY id ASC";
+        break;
+}
+
+$sql .= " LIMIT ? OFFSET ?";
+$params[] = $itemsPerPage;
+$params[] = $offset;
+$types .= "ii";
 
 $stmt = $conn->prepare($sql);
 

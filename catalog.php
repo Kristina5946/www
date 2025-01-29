@@ -61,17 +61,29 @@
         <button class="btn btn-primary me-2" onclick="showGirlsCatalog()">Девочки</button>
         <button class="btn btn-primary" onclick="showBoysCatalog()">Мальчики</button>
       </div>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Сортировка
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+            <li><a class="dropdown-item" href="#" onclick="setSortOrder('price_asc')">По возрастанию цены</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setSortOrder('price_desc')">По убыванию цены</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setSortOrder('newest')">По новинкам</a></li>
+            <li><a class="dropdown-item" href="#" onclick="setSortOrder('oldest')">От старых к новым</a></li>
+        </ul>
+      </div>
       
       <!-- Сетка товаров -->
       
       <div class="container my-5">
         <div id="catalog" class="row row-cols-1 row-cols-md-5 g-4">
           <!-- Товары будут загружаться сюда через JavaScript -->
-          
         </div>
+        <div id="catalog" class="row"></div>
+      <button id="loadMoreButton" class="btn btn-primary mt-3" style="width: auto; margin-left: auto; display: block;">Загрузить еще</button>
+    
       </div>
-    </div>  
-    <!-- Модальное окно избранного -->
+      <!-- Модальное окно избранного -->
     <div class="modal fade" id="favoritesModal" tabindex="-1" aria-labelledby="favoritesModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
