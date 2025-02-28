@@ -91,7 +91,7 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
     <style>
-        .table-container {
+        .table-responsive {
             background: rgba(58, 49, 83, 0.72);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -227,7 +227,7 @@ $conn->close();
                     <h4>Общий доход</h4>
                     <p class="fs-4"><?php echo number_format($total_income, 2, ',', ' '); ?>₽</p>
                 </div>
-                <div class="table-responsive table-container">
+                <div class="table-responsive ">
                     <table class="table table-striped table-dark table-columns">
                         <thead>
                             <tr>

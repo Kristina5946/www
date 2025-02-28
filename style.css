@@ -1,11 +1,98 @@
+/* Подключение шрифта с альтернативой на случай ошибки загрузки */
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+/* ============================= */
+/* Нулевой (Fallback) стиль */
+/* ============================= */
+
+html, body {
+    font-family: "Oswald", sans-serif, Arial, sans-serif; /* Основа + резервные шрифты */
+    font-size: 16px; /* Базовый размер шрифта */
+    line-height: 1.5; /* Оптимальный межстрочный интервал */
+    background-color: #fff;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "TestOswald";
+    src: local("Oswald");
+}
+
+/* Если Oswald не загружен, уменьшаем размер шрифта для Arial */
+@supports not (font-family: "TestOswald") {
+    html, body {
+        font-size: 14px; /* Уменьшенный размер для Arial */
+    }
+}
+
+/* Общие fallback стили для контейнеров */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Базовая сетка */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.col {
+    flex: 1;
+    min-width: 300px;
+    padding: 10px;
+}
+
+/* Нулевой CSS для всех браузеров */
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    font-family: "Oswald", sans-serif;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section {
+    display: block;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote::before, blockquote::after,
+q::before, q::after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
 
 /* Общие стили */
 * {
     margin: 0;
     padding: 0;
-    font-family: "Oswald", sans-serif;
-    box-sizing: border-box; /* Применяем border-box ко всем элементам */
+    font-family: "Oswald", sans-serif, Arial, sans-serif;
+    line-height: 1.5;
+    box-sizing: border-box;
 }
 
 body {

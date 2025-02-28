@@ -1,5 +1,5 @@
 let currentPage = 1;
-const itemsPerPage = 3;
+const itemsPerPage = 16;
 let currentCategory = 'девочки'; // Категория по умолчанию
 let sortOrder = 'oldest'; // Порядок сортировки по умолчанию
 
