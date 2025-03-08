@@ -1,4 +1,4 @@
-/* Подключение шрифта с альтернативой на случай ошибки загрузки */
+/* Подключение шрифта  */
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
 /* ============================= */
@@ -16,16 +16,46 @@ html, body {
     box-sizing: border-box;
 }
 
-@font-face {
-    font-family: "TestOswald";
-    src: local("Oswald");
-}
-
 /* Если Oswald не загружен, уменьшаем размер шрифта для Arial */
-@supports not (font-family: "TestOswald") {
+@supports not (font-family: "Oswald") {
     html, body {
         font-size: 14px; /* Уменьшенный размер для Arial */
     }
+    .animate-text1 {
+        font-size: 2.5vw; /* Изменён размер шрифта */
+        margin: 0;
+        color: #451373;
+        margin-bottom: 15px; /* Отступ снизу от заголовка */
+        padding-top: 20px; /* Отступ сверху для отдаления от меню */
+    }
+    .content {
+        max-width: 78%;
+    }
+    .animate-text2 {
+        font-size: 1.5vw; /* Изменён размер шрифта */
+        color: white; /* Цвет текста (можно изменить) */
+        text-shadow:
+            -1px -1px 0 #451373,
+            1px -1px 0 #451373,
+            -1px 1px 0 #451373,
+            1px 1px 0 #451373; /* Обводка букв тем же цветом, что и заголовок */
+        max-height: 20vh; /* Максимальная высота заголовка в зависимости от высоты окна */
+        overflow: hidden; /* Скрыть текст, если он превышает max-height */
+    }
+    /*Блок почему мы*/
+    .section-title {
+        font-size: 1.2vw; /* Размер текста справа */
+        font-weight: normal; /* Убираем жирность текста */
+        line-height: 1.45; /* Увеличиваем межстрочный интервал */
+    }
+
+    .additional-text {
+        font-size: 1.4vw; /* Размер дополнительного текста */
+        text-align: center; /* Центрируем текст */
+        margin: 0; /* Убираем стандартные отступы */
+        line-height: 1.5; /* Увеличиваем межстрочный интервал */
+    }
+    
 }
 
 /* Общие fallback стили для контейнеров */
@@ -145,7 +175,9 @@ header {
 
 /* Стили для логотипа */
 .logo {
-    width: 450px;
+    margin-left: 12vw;
+    margin-right: 7vw;
+    width: 100px;
     cursor: pointer;
 }
 
@@ -597,7 +629,7 @@ header {
 }
 
 .section-title {
-    font-size: 1.55vw; /* Размер текста справа */
+    font-size: 1.45vw; /* Размер текста справа */
     font-weight: normal; /* Убираем жирность текста */
     line-height: 1.6; /* Увеличиваем межстрочный интервал */
 }
@@ -616,7 +648,7 @@ header {
     line-height: 1.8; /* Увеличиваем межстрочный интервал */
 }
 
-/* Пример стиля для мобильного устройства */
+/* Стиль для мобильного устройства */
 @media (max-width: 768px) {
     .background-section {
         padding: 50px; /* Уменьшаем отступы на мобильных устройствах */

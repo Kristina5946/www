@@ -95,7 +95,7 @@ $conn->close();
             background: rgba(58, 49, 83, 0.72);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            overflow-x: auto; /* Добавлено для горизонтального скролла */
             border-collapse: collapse;
             animation: slideUp 1s ease-in-out;
         }

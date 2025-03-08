@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg" style="background-color: #F3ECF8;">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="image/logo.png" alt="Логотип" class="logo">
+            <img src="image/лого.png" alt="Логотип" class="logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
             <span class="navbar-toggler-icon"></span>

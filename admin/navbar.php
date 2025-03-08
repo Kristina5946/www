@@ -1,6 +1,6 @@
 <nav class="col-md-3 col-lg-2 d-md-block sidebar py-3">
     <div class="position-sticky">
-        <img src="../image/logo.png" alt="Логотип" class="logo" style="width: 250px; height: auto;">
+        <img src="../image/лого.png" alt="Логотип" class="logo" style="width: 100px; height: auto; ">
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link active" href="admin_panel.php">
